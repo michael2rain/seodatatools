@@ -1,14 +1,12 @@
 {
     "name": "seodatatools",
-    "main": "./www/dist/_worker.js/index.js",
-    // Update to today's date
-    "compatibility_date": "2025-03-25",
+    "compatibility_date": "2025-04-01",
     "compatibility_flags": [
         "nodejs_compat"
     ],
     "assets": {
         "binding": "ASSETS",
-        "directory": "./www/dist"
+        "directory": "./dist"
     },
     "observability": {
         "enabled": true
