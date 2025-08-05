@@ -2,20 +2,43 @@
 export const prerender = false;
 import Layout from "../layouts/Layout.astro";
 
-// Incrementar contador de visitas con día horas y segundos
-const date = new Date();
+const posts: any = await fetch(
+	"https://aceroscrea.com/wp-json/wp/v2/posts?_embed&per_page=6",
+).then((res) => res.json());
 ---
 
 <Layout>
 	<main class="bg-gray-900 text-white h-screen grid place-content-center">
 		<section
-			class="w-fit p-12 bg-amber-50/30 border border-amber-50/50 rounded-lg"
+			class="w-7xl p-12 bg-amber-50/30 border border-amber-50/50 rounded-lg"
 		>
 			<h1 class="text-5xl font-bold mb-12">SEO Data Tools</h1>
-			<p class="w-fit text-2xl font-medium flex flex-col gap-4">
-				<span>Fecha:</span>
-				<span class="bg-gray-800 p-4 rounded-lg">{date}</span>
-			</p>
+			<ul class="grid grid-cols-1 md:grid-cols-3 gap-4">
+				{
+					posts.map((post: any) => (
+						<li class="mb-4">
+							<a
+								href={post.link}
+								class="text-xl font-bold hover:underline"
+								target="_blank"
+								rel="noopener noreferrer"
+								title={post.title}
+							>
+								<img
+									src={
+										post._embedded["wp:featuredmedia"]["0"]
+											.source_url
+									}
+									alt={post.title}
+									class="w-full h-48 object-cover rounded-lg"
+								/>
+								{post.title.rendered}
+							</a>
+							<p class="text-sm">{post.date}</p>
+						</li>
+					))
+				}
+			</ul>
 		</section>
 	</main>
 </Layout>
