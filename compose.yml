@@ -6,6 +6,7 @@ services:
     working_dir: /home/node/app
     ports:
       - "4321:4321"
+      - "8976:8976" # Cloudflare Workers Auth
     volumes:
       - ./:/home/node/app
     environment:
