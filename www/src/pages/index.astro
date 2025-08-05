@@ -3,25 +3,21 @@ export const prerender = false;
 import Layout from "../layouts/Layout.astro";
 
 const posts: any = await fetch(
-	"https://aceroscrea.com/wp-json/wp/v2/posts?_embed&per_page=6",
+	"https://aceroscrea.com/wp-json/wp/v2/posts?_embed&per_page=12",
 ).then((res) => res.json());
 ---
 
 <Layout>
-	<main class="bg-gray-900 text-white h-screen grid place-content-center">
-		<section
-			class="w-7xl p-12 bg-amber-50/30 border border-amber-50/50 rounded-lg"
-		>
-			<h1 class="text-5xl font-bold mb-12">SEO Data Tools</h1>
-			<ul class="grid grid-cols-1 md:grid-cols-3 gap-4">
+	<main class="container max-w-7xl mx-auto px-6 md:px-12">
+		<article class="py-16 md:my-24">
+			<h1 class="text-6xl font-bold mb-12">Blog template</h1>
+			<ul class="grid grid-cols-1 md:grid-cols-3 gap-6">
 				{
 					posts.map((post: any) => (
 						<li class="mb-4">
 							<a
-								href={post.link}
+								href={new URL(post.link).pathname}
 								class="text-xl font-bold hover:underline"
-								target="_blank"
-								rel="noopener noreferrer"
 								title={post.title}
 							>
 								<img
@@ -39,6 +35,6 @@ const posts: any = await fetch(
 					))
 				}
 			</ul>
-		</section>
+		</article>
 	</main>
 </Layout>
