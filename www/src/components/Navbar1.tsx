@@ -83,7 +83,7 @@ const Navbar1 = ({
     },
     {
       title: "Precios",
-      url: "#",
+      url: "/precios",
     },
     {
       title: "Blog",
