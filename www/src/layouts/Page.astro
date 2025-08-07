@@ -1,0 +1,17 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { Navbar1 } from "@/components/Navbar1";
+import { Footer7 } from "@/components/Footer";
+---
+
+<Layout>
+    <header>
+        <Navbar1 client:idle />
+    </header>
+    <main>
+        <slot />
+    </main>
+    <footer>
+        <Footer7 />
+    </footer>
+</Layout>

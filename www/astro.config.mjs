@@ -5,7 +5,7 @@ import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import cloudflare from '@astrojs/cloudflare';
 
-// https://github.com/withastro/astro/issues/12824
+// * BUG: https://github.com/withastro/astro/issues/12824
 const alias = import.meta.env.PROD ? {
   "react-dom/server": "react-dom/server.edge",
 } : undefined;
