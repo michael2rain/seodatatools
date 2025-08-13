@@ -7,7 +7,7 @@ services:
     ports:
       - "4321:4321"
     volumes:
-      - ./:/home/node/app
+      - ./app:/home/node/app
     environment:
       - NODE_ENV=development
       - PORT=4321
@@ -15,7 +15,6 @@ services:
     stdin_open: true # Permitir entrada de teclado
     networks:
       - astro-network
-
 
 networks:
   astro-network:
