@@ -4,6 +4,8 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import cloudflare from '@astrojs/cloudflare';
+import clerk from "@clerk/astro";
+
 
 // * BUG: https://github.com/withastro/astro/issues/12824
 const alias = import.meta.env.PROD ? {
@@ -12,7 +14,7 @@ const alias = import.meta.env.PROD ? {
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [react()],
+  integrations: [react(), clerk()],
 
   vite: {
     plugins: [tailwindcss()],

@@ -16,6 +16,7 @@ services:
     stdin_open: true # Permitir entrada de teclado
     networks:
       - astro-network
+    command: npm run dev
 
 networks:
   astro-network:
