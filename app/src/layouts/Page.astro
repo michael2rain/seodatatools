@@ -13,7 +13,7 @@ const menuItems: any = await getMenu("primary");
 
 const menu = menuItems.map((item: any) => ({
     title: item.title.rendered,
-    url: item.url,
+    url: new URL(item.url).pathname,
 }));
 ---
 

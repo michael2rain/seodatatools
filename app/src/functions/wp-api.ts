@@ -12,11 +12,11 @@ const WP_AUTH_KEY = Buffer.from(`${WP_AUTH_USER}:${WP_AUTH_PASS}`).toString(
     "base64",
 );
 
-export const getPostById = async (id: number) => {
-    const response = await fetch(`${WORDPRESS_API_BASE}/posts/${id}`);
-    const post = await response.json();
-    return post;
-};
+export const getPostBySlug = async (slug: string) => {
+    const response = await fetch(`${WORDPRESS_API_BASE}/posts?slug=${slug}`);
+    const pages: any[] = await response.json();
+    return pages[0] || null;
+}
 
 /** pages */
 export const getPages = async () => {

@@ -109,6 +109,8 @@ const Navbar1 = ({
                 height={40}
                 className="max-h-8 dark:invert"
                 alt={logo.alt}
+                loading="eager"
+                fetchPriority="high"
               />
             </a>
             <div className="flex items-center">

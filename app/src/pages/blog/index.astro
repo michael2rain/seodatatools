@@ -5,21 +5,31 @@ import Page from "@/layouts/Page.astro";
 
 const { slug } = Astro.params;
 
-if (!slug) {
-    return Astro.redirect("/404");
-}
-
-const page = await getPageBySlug(Array.isArray(slug) ? slug.join("/") : slug);
+const page = await getPageBySlug("blog/");
 
 if (!page) {
     return Astro.redirect("/404");
 }
 
-// Agregar caché a la respuesta
-Astro.response.headers.set(
-    "Cache-Control",
-    "s-maxage=60, stale-while-revalidate=120",
-);
+function normalizeLocalURLs(html: string): string {
+    // 1️⃣ Decodificar entidades HTML (por si WordPress escapó las comillas o los :)
+    const decoded = html
+        .replaceAll(/&quot;/g, '"')
+        .replaceAll(/&#x3A;/g, ":")
+        .replaceAll(/&#039;/g, "'")
+        .replaceAll(/&amp;/g, "&");
+
+    // 2️⃣ Corregir URLs con puertos duplicados, como :4321:4321
+    const fixed = decoded.replace(
+        /(https?:\/\/(?:localhost|127\.0\.0\.1):\d+):\d+(\/[\w\-./?=#%&]*)/g,
+        "$1$2",
+    );
+
+    // 3️⃣ Devolver HTML corregido
+    return fixed;
+}
+
+const cleanContent = normalizeLocalURLs(page.content.rendered);
 ---
 
 <Page content={page.content.rendered}>
@@ -30,10 +40,7 @@ Astro.response.headers.set(
             </h1>
         </section>
         <section class="w-4xl py-20 px-12">
-            <div
-                class="prose prose-lg max-w-none"
-                set:html={page.content.rendered}
-            />
+            <div class="prose prose-lg max-w-none" set:html={cleanContent} />
         </section>
     </article>
 </Page>

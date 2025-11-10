@@ -1,5 +1,5 @@
 ---
-import { getPageBySlug } from "@/functions/wp-api";
+import { getPostBySlug } from "@/functions/wp-api";
 
 import Page from "@/layouts/Page.astro";
 
@@ -9,7 +9,7 @@ if (!slug) {
     return Astro.redirect("/404");
 }
 
-const page = await getPageBySlug(Array.isArray(slug) ? slug.join("/") : slug);
+const page = await getPostBySlug(Array.isArray(slug) ? slug.join("/") : slug);
 
 if (!page) {
     return Astro.redirect("/404");
@@ -20,6 +20,10 @@ Astro.response.headers.set(
     "Cache-Control",
     "s-maxage=60, stale-while-revalidate=120",
 );
+
+function fixDuplicatedPorts(html: string): string {
+    return html.replaceAll(/(https?:\/\/localhost:\d+):\1/g, "$1");
+}
 ---
 
 <Page content={page.content.rendered}>
@@ -32,7 +36,7 @@ Astro.response.headers.set(
         <section class="w-4xl py-20 px-12">
             <div
                 class="prose prose-lg max-w-none"
-                set:html={page.content.rendered}
+                set:html={fixDuplicatedPorts(page.content.rendered)}
             />
         </section>
     </article>
