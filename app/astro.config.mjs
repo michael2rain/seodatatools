@@ -3,8 +3,8 @@ import { defineConfig } from 'astro/config';
 
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
-import cloudflare from '@astrojs/cloudflare';
 
+import node from '@astrojs/node';
 
 // * BUG: https://github.com/withastro/astro/issues/12824
 const alias = import.meta.env.PROD ? {
@@ -20,12 +20,9 @@ export default defineConfig({
     resolve: { alias },
   },
 
-  adapter: cloudflare({
-    imageService: 'cloudflare',
-    platformProxy: {
-      enabled: true,
-    },
-  }),
-
   output: 'server',
+
+  adapter: node({
+    mode: 'standalone',
+  }),
 });
