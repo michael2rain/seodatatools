@@ -1,4 +1,4 @@
-FROM wordpress:latest
+FROM wordpress:6.8.3
 
 # Configuración de PHP
 RUN { \
