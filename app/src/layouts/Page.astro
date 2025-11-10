@@ -1,12 +1,25 @@
 ---
+import { getMenu } from "@/functions/wp-api";
 import Layout from "@/layouts/Layout.astro";
+
 import { Navbar1 } from "@/components/Navbar1";
 import { Footer7 } from "@/components/Footer";
+
+/**
+ * Fetch the menu data from WordPress
+ */
+
+const menuItems: any = await getMenu("primary");
+
+const menu = menuItems.map((item: any) => ({
+    title: item.title.rendered,
+    url: item.url,
+}));
 ---
 
 <Layout>
     <header>
-        <Navbar1 client:idle />
+        <Navbar1 client:idle menu={menu} />
     </header>
     <main>
         <slot />

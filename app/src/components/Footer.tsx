@@ -60,7 +60,7 @@ const defaultSocialLinks = [
 ];
 
 const defaultLegalLinks = [
-    { name: "Terms and Conditions", href: "#" },
+    { name: "Política de privacidad", href: "/politica-privacidad/" },
     { name: "Privacy Policy", href: "#" },
 ];
 

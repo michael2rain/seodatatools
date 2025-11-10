@@ -1,0 +1,38 @@
+---
+import { getPageBySlug } from "@/functions/wp-api";
+
+import Page from "@/layouts/Page.astro";
+
+const { slug } = Astro.params;
+
+if (!slug) {
+    return Astro.redirect("/404");
+}
+
+const page = await getPageBySlug(Array.isArray(slug) ? slug.join("/") : slug);
+
+if (!page) {
+    return Astro.redirect("/404");
+}
+---
+
+<Page content={page.content.rendered}>
+    <article class="container min-h-32 flex flex-col items-start">
+        <section class="grid place-content-center bg-orange-50 px-8 py-6 mt-12">
+            <h1 class="text-4xl font-bold text-primary">
+                {page.title.rendered}
+            </h1>
+        </section>
+        <section class="grid place-content-center bg-gray-50 px-8 py-6">
+            <p class="text-lg text-gray-700">
+                {page.excerpt.rendered.replace(/<[^>]+>/g, "")}
+            </p>
+        </section>
+        <section class="w-4xl py-20 px-12">
+            <div
+                class="prose prose-lg max-w-none"
+                set:html={page.content.rendered}
+            />
+        </section>
+    </article>
+</Page>
