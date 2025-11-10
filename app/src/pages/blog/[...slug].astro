@@ -1,5 +1,6 @@
 ---
 import { getPostBySlug } from "@/functions/wp-api";
+import { normalizeLocalURLs } from "@/lib/utils";
 
 import Page from "@/layouts/Page.astro";
 
@@ -20,10 +21,6 @@ Astro.response.headers.set(
     "Cache-Control",
     "s-maxage=60, stale-while-revalidate=120",
 );
-
-function fixDuplicatedPorts(html: string): string {
-    return html.replaceAll(/(https?:\/\/localhost:\d+):\1/g, "$1");
-}
 ---
 
 <Page content={page.content.rendered}>
@@ -36,7 +33,7 @@ function fixDuplicatedPorts(html: string): string {
         <section class="w-4xl py-20 px-12">
             <div
                 class="prose prose-lg max-w-none"
-                set:html={fixDuplicatedPorts(page.content.rendered)}
+                set:html={normalizeLocalURLs(page.content.rendered)}
             />
         </section>
     </article>
