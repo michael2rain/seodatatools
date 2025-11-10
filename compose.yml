@@ -1,22 +1,82 @@
 services:
+  # Astro
   astro:
-    container_name: astro
-    image: node:22-slim
-    user: "node"
-    working_dir: /home/node/app
+    build:
+      context: .
+      dockerfile: node.dockerfile
+    container_name: ${INSTANCE_NAME}-app
+    env_file:
+      - .env
     ports:
-      - "4321:4321"
+      - "${APP_PORT}:${APP_PORT}"
     volumes:
       - ./app:/home/node/app
-    environment:
-      - NODE_ENV=development
-      - PORT=4321
-    tty: true
-    stdin_open: true
+      - /home/node/app/node_modules
+    command:
+      ["npm", "run", "dev", "--host", "0.0.0.0", "--port", "${APP_PORT}"]
     networks:
-      - astro-network
-    command: ["npm", "run", "dev"]
+      - frontend
+
+  # Database
+  mariadb:
+    image: bitnami/mariadb:latest
+    container_name: ${INSTANCE_NAME}-db
+    depends_on:
+      - astro
+    volumes:
+      - mariadb:/bitnami/mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_PASS}
+      MARIADB_DATABASE: ${INSTANCE_NAME}_db
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASS}
+    networks:
+      - backend
+
+  # WordPress
+  wordpress:
+    build:
+      context: .
+      dockerfile: wordpress.dockerfile
+    container_name: ${INSTANCE_NAME}-cms
+    depends_on:
+      - mariadb
+    ports:
+      - "${WP_PORT}:80"
+    environment:
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_NAME: ${INSTANCE_NAME}_db
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASS}
+    volumes:
+      - ./cms:/var/www/html
+    networks:
+      - backend
+      - frontend
+
+  # PhpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: ${INSTANCE_NAME}-phpmyadmin
+    depends_on:
+      - wordpress
+      - mariadb
+    ports:
+      - "${PHPMYADMIN_PORT}:80"
+    environment:
+      MYSQL_USERNAME: ${DB_USER}
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_PORT_3306_TCP_ADDR: mariadb
+      PMA_HOST: mariadb
+    networks:
+      - backend
+      - frontend
+
+volumes:
+  mariadb:
 
 networks:
-  astro-network:
+  frontend:
     driver: bridge
+  backend:
+    external: false

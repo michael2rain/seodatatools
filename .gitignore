@@ -1,11 +1,14 @@
+# WordPress data directory
+cms/
+
 # build output
-dist/
+app/dist/
 
 # generated types
-.astro/
+app/.astro/
 
 # dependencies
-node_modules/
+app/node_modules/
 
 # logs
 npm-debug.log*
@@ -22,13 +25,3 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
-
-# wrangler files
-.wrangler
-.dev.vars*
-!.dev.vars.example
-.env*
-!.env.example
-
-# API REST Cliente
-API-Rest-Client.http
