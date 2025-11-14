@@ -1,0 +1,19 @@
+---
+import { getMenu } from "@/functions/wp-api";
+import { Navbar1 } from "@/components/Navbar1";
+
+/**
+ * Fetch the menu data from WordPress
+ */
+
+const menuItems: any = await getMenu("primary");
+
+const menu = menuItems.map((item: any) => ({
+    title: item.title.rendered,
+    url: new URL(item.url).pathname,
+}));
+---
+
+<header class="type-page">
+    <Navbar1 client:idle menu={menu} />
+</header>
