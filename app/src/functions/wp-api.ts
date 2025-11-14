@@ -38,6 +38,11 @@ export const getMenu = async (name: string) => {
             Authorization: `Basic ${WP_AUTH_KEY}`
         }
     });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch menu location: ${response.statusText}`);
+    }
+
     const location: { menu: string } = await response.json();
     const menuResponse = await fetch(`${WORDPRESS_API_BASE}/menu-items?id=${location.menu}`, {
         headers: {
